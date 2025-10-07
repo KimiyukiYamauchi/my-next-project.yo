@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./index.module.css";
 import { Suspense } from "react";
 
 function SearchFieldComponent() {
   const router = useRouter();
-  const searchParams = new URLSearchParams();
+  const searchParams = useSearchParams();
+  const currentQuery = searchParams.get("q") || ""; // ← 現在の検索語を保持
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ function SearchFieldComponent() {
         <input
           type="text"
           name="q"
-          defaultValue={searchParams.get("q") ?? undefined}
+          defaultValue={currentQuery} // ← URLのqパラメータを反映
           placeholder="キーワードを入力"
           className={styles.searchInput}
         />
