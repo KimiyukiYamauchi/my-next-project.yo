@@ -35,7 +35,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
   }
 
   const result = await fetch(
-    `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.HUBSPORT_PORTAL_ID}/${process.env.HUBSPORT_FORM_ID}`,
+    `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.HUBSPOT_PORTAL_ID}/${process.env.HUBSPOT_FORM_ID}`,
     {
       method: "POST",
       headers: {
@@ -44,27 +44,27 @@ export async function createContactData(_prevState: any, formData: FormData) {
       body: JSON.stringify({
         fields: [
           {
-            obectTypeId: "0-1",
+            objectTypeId: "0-1",
             name: "lastname",
             value: rawFormData.lastname,
           },
           {
-            obectTypeId: "0-1",
+            objectTypeId: "0-1",
             name: "firstname",
             value: rawFormData.firstname,
           },
           {
-            obectTypeId: "0-1",
+            objectTypeId: "0-1",
             name: "company",
             value: rawFormData.company,
           },
           {
-            obectTypeId: "0-1",
+            objectTypeId: "0-1",
             name: "email",
             value: rawFormData.email,
           },
           {
-            obectTypeId: "0-1",
+            objectTypeId: "0-1",
             name: "message",
             value: rawFormData.message,
           },
