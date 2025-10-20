@@ -33,7 +33,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form className={styles.from} action={formAction}>
+    <form className={styles.from} action={formAction} onSubmit={handleSubmit}>
       {state.status === "error" && (
         <p className={styles.error}>{state.message}</p>
       )}
