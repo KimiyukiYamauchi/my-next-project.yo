@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     images: ["/ogp.png"],
   },
   alternates: {
-    canonical: "http://localhost:3000",
+    canonical: "https://my-next-project-yo.vercel.app/",
   },
 };
 
