@@ -11,8 +11,6 @@ type Props = {
   searchParams: Promise<{ dk?: string }>;
 };
 
-export const revalidate = 60;
-
 export default async function Page({ params, searchParams }: Props) {
   // params は Promise なので await する必要がある
   const resolvedParams = await params;
