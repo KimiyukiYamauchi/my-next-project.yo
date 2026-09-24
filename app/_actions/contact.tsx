@@ -1,5 +1,7 @@
 "use server";
 
+import { supabase } from "@/app/_libs/supabase";
+
 function validateEmail(email: string) {
   const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return pattern.test(email);
@@ -18,88 +20,58 @@ export async function createContactData(
     message: formData.get("message") as string,
   };
 
+  // エラー時は values に入力値を入れて返し、フォームに入力内容を戻す
   if (!rawFormData.lastname) {
     return {
       status: "error",
+      values: rawFormData,
       message: "姓を入力してください",
     };
   }
   if (!rawFormData.firstname) {
     return {
       status: "error",
+      values: rawFormData,
       message: "名を入力してください",
     };
   }
   if (!rawFormData.company) {
     return {
       status: "error",
+      values: rawFormData,
       message: "会社名を入力してください",
     };
   }
   if (!rawFormData.email) {
     return {
       status: "error",
+      values: rawFormData,
       message: "メールアドレスを入力してください",
     };
   }
   if (!validateEmail(rawFormData.email)) {
     return {
       status: "error",
+      values: rawFormData,
       message: "メールアドレスの形式が誤っています",
     };
   }
   if (!rawFormData.message) {
     return {
       status: "error",
+      values: rawFormData,
       message: "メッセージを入力してください",
     };
   }
 
-  const result = await fetch(
-    `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.HUBSPOT_PORTAL_ID}/${process.env.HUBSPOT_FORM_ID}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: [
-          {
-            objectTypeId: "0-1",
-            name: "lastname",
-            value: rawFormData.lastname,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "firstname",
-            value: rawFormData.firstname,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "company",
-            value: rawFormData.company,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "email",
-            value: rawFormData.email,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "message",
-            value: rawFormData.message,
-          },
-        ],
-      }),
-    },
-  );
+  // contacts テーブルに 1 行追加する
+  const { error } = await supabase.from("contacts").insert(rawFormData);
 
-  try {
-    await result.json();
-  } catch (e) {
-    console.log(e);
+  if (error) {
+    console.log(error);
     return {
       status: "error",
+      values: rawFormData,
       message: "お問い合わせに失敗しました",
     };
   }

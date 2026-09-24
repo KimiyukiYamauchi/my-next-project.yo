@@ -4,9 +4,14 @@ import { sendGAEvent } from "@next/third-parties/google";
 import { createContactData } from "@/app/_actions/contact";
 import styles from "./index.module.css";
 import { useActionState } from "react";
-import { send } from "process";
 
-const initialState = {
+type ContactState = {
+  status: string;
+  message: string;
+  values?: Record<string, string>; // エラー時に戻ってくる入力値
+};
+
+const initialState: ContactState = {
   status: "",
   message: "",
 };
@@ -39,6 +44,7 @@ export default function ContactForm() {
             type="text"
             id="lastname"
             name="lastname"
+            defaultValue={state.values?.lastname}
           />
         </div>
         <div className={styles.item}>
@@ -50,6 +56,7 @@ export default function ContactForm() {
             type="text"
             id="firstname"
             name="firstname"
+            defaultValue={state.values?.firstname}
           />
         </div>
       </div>
@@ -62,6 +69,7 @@ export default function ContactForm() {
           type="text"
           id="company"
           name="company"
+          defaultValue={state.values?.company}
         />
       </div>
       <div className={styles.item}>
@@ -73,13 +81,19 @@ export default function ContactForm() {
           type="text"
           id="email"
           name="email"
+          defaultValue={state.values?.email}
         />
       </div>
       <div className={styles.item}>
         <label className={styles.label} htmlFor="message">
           メッセージ
         </label>
-        <textarea className={styles.textarea} id="message" name="message" />
+        <textarea
+          className={styles.textarea}
+          id="message"
+          name="message"
+          defaultValue={state.values?.message}
+        />
       </div>
       <div className={styles.actions}>
         {state.status === "error" && (
