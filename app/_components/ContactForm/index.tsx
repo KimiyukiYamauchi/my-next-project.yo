@@ -95,6 +95,15 @@ export default function ContactForm() {
           defaultValue={state.values?.message}
         />
       </div>
+      {/* ハニーポット: ボット対策用。画面には表示しない */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className={styles.honeypot}
+      />
       <div className={styles.actions}>
         {state.status === "error" && (
           <p className={styles.error}>{state.message}</p>

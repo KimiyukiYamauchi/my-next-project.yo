@@ -4,6 +4,18 @@ import type { News } from "@/app/_libs/microcms";
 import Date from "../Date";
 import Category from "../Category";
 import styles from "./index.module.css";
+import sanitizeHtml from "sanitize-html";
+
+// microCMS のリッチエディタが出力するタグだけを許可し、script やイベント属性を取り除く
+const sanitizeOptions: sanitizeHtml.IOptions = {
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "h1", "h2"]),
+  allowedAttributes: {
+    ...sanitizeHtml.defaults.allowedAttributes,
+    "*": ["id", "class"],
+    img: ["src", "alt", "width", "height"],
+  },
+  allowedSchemes: ["http", "https", "mailto", "tel"],
+};
 
 type Props = {
   data: News;
@@ -35,7 +47,7 @@ export default function Article({ data }: Props) {
       <div
         className={styles.content}
         dangerouslySetInnerHTML={{
-          __html: data.content,
+          __html: sanitizeHtml(data.content, sanitizeOptions),
         }}
       />
     </main>
